@@ -57,7 +57,9 @@ const Login = () => {
     const result = await login(formData);
     
     if (result.success) {
-      success(`Welcome back, ${result.data.user.firstName}!`);
+      // Safely access user data with fallback
+      const userName = result.data?.user?.firstName || result.data?.firstName || 'User';
+      success(`Welcome back, ${userName}!`);
       navigate(from, { replace: true });
     }
   };
@@ -98,7 +100,7 @@ const Login = () => {
                   type="text"
                   autoComplete="username"
                   required
-                  className="block w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 bg-gray-50/50 hover:bg-white hover:border-gray-300"
+                  className="block w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 bg-white hover:bg-white hover:border-gray-300 text-gray-900"
                   placeholder="rahulsharma or rahul@example.com"
                   value={formData.username}
                   onChange={handleChange}
@@ -123,7 +125,7 @@ const Login = () => {
                   type={showPassword ? "text" : "password"}
                   autoComplete="current-password"
                   required
-                  className="block w-full pl-12 pr-12 py-3 border-2 border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 bg-gray-50/50 hover:bg-white hover:border-gray-300"
+                  className="block w-full pl-12 pr-12 py-3 border-2 border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 bg-white hover:bg-white hover:border-gray-300 text-gray-900"
                   placeholder="Enter your password"
                   value={formData.password}
                   onChange={handleChange}
