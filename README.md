@@ -2,8 +2,6 @@
 
 A comprehensive food delivery management platform built with **React.js**, **Node.js**, **Express.js**, and **MongoDB**. Nomino Pro streamlines restaurant operations and delivery management with real-time tracking, role-based dashboards, and advanced analytics.
 
-![Nomino Pro Banner](https://img.shields.io/badge/Nomino%20Pro-Food%20Delivery%20Platform-orange?style=for-the-badge&logo=food&logoColor=white)
-
 ## 🚀 **Features**
 
 ### **🏪 Restaurant Manager Dashboard**
@@ -54,15 +52,6 @@ A comprehensive food delivery management platform built with **React.js**, **Nod
 - **Socket.io** - Real-time bidirectional communication
 - **JWT** - JSON Web Token authentication
 - **bcryptjs** - Password hashing
-
-## 📋 **Prerequisites**
-
-Before you begin, ensure you have the following installed:
-
-- **Node.js** (v16.0.0 or higher) - [Download](https://nodejs.org/)
-- **MongoDB** (v5.0.0 or higher) - [Download](https://www.mongodb.com/try/download/community)
-- **Git** - [Download](https://git-scm.com/)
-- **npm** or **yarn** package manager
 
 ## 🚀 **Quick Start**
 
@@ -123,9 +112,9 @@ cd frontend && npm start
 ```
 Nomino Pro/
 ├── backend/
-│   ├── models/
+│   ├────── models/
 │   │   ├── User.js              # User model (Restaurant Managers & Delivery Partners)
-│   │   │   └── Order.js             # Order model with status tracking
+│   │    ── Order.js             # Order model with status tracking
 │   │   ├── routes/
 │   │   │   ├── auth.js              # Authentication routes
 │   │   │   ├── orders.js            # Order management routes
@@ -329,10 +318,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 👨‍💻 **Author**
 
 **Your Name**
-- GitHub: [@yourusername](https://github.com/yourusername)
-- LinkedIn: [Your LinkedIn](https://linkedin.com/in/yourprofile)
-- Email: your.email@example.com
-
+- GitHub: https://github.com/kalashmishra21/Nomino-Pro.git)
 ## 🙏 **Acknowledgments**
 
 - **MongoDB** for the robust database solution
