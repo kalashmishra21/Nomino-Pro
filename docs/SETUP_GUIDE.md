@@ -7,7 +7,7 @@ Complete step-by-step guide to set up Nomino Pro Food Delivery Management System
 
 ### **Step 1: Clone Repository**
 ```bash
-git clone https://github.com/yourusername/nomino-pro.git
+git clone[ https://github.com/yourusername/nomino-pro.git](https://github.com/kalashmishra21/Nomino-Pro.git)
 cd nomino-pro
 ```
 
