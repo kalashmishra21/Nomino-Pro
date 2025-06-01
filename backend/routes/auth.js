@@ -82,10 +82,13 @@ router.post('/register', validateUserRegistration, async (req, res) => {
           lastName: user.lastName,
           fullName: user.fullName,
           phone: user.phone,
+          isActive: user.isActive,
           isAvailable: user.isAvailable,
           vehicleType: user.vehicleType,
           rating: user.rating,
-          totalDeliveries: user.totalDeliveries
+          totalDeliveries: user.totalDeliveries,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt
         }
       }
     });
@@ -169,11 +172,14 @@ router.post('/login', validateUserLogin, async (req, res) => {
           lastName: user.lastName,
           fullName: user.fullName,
           phone: user.phone,
+          isActive: user.isActive,
           isAvailable: user.isAvailable,
           vehicleType: user.vehicleType,
           currentLocation: user.currentLocation,
           rating: user.rating,
-          totalDeliveries: user.totalDeliveries
+          totalDeliveries: user.totalDeliveries,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt
         }
       }
     });

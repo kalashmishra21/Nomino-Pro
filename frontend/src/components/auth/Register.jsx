@@ -225,7 +225,7 @@ const Register = () => {
                   name="firstName"
                   type="text"
                   required
-                  className="block w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 bg-gray-50/50 hover:bg-white hover:border-gray-300 text-sm"
+                  className="block w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 bg-white hover:bg-white hover:border-gray-300 text-sm text-gray-900"
                   placeholder="Rahul"
                   value={formData.firstName}
                   onChange={handleChange}
@@ -240,7 +240,7 @@ const Register = () => {
                   name="lastName"
                   type="text"
                   required
-                  className="block w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 bg-gray-50/50 hover:bg-white hover:border-gray-300 text-sm"
+                  className="block w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 bg-white hover:bg-white hover:border-gray-300 text-sm text-gray-900"
                   placeholder="Sharma"
                   value={formData.lastName}
                   onChange={handleChange}
@@ -259,7 +259,7 @@ const Register = () => {
                   name="username"
                   type="text"
                   required
-                  className="block w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 bg-gray-50/50 hover:bg-white hover:border-gray-300 text-sm"
+                  className="block w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 bg-white hover:bg-white hover:border-gray-300 text-sm text-gray-900"
                   placeholder="rahulsharma"
                   value={formData.username}
                   onChange={handleChange}
@@ -275,7 +275,7 @@ const Register = () => {
                   name="email"
                   type="email"
                   required
-                  className="block w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 bg-gray-50/50 hover:bg-white hover:border-gray-300 text-sm"
+                  className="block w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 bg-white hover:bg-white hover:border-gray-300 text-sm text-gray-900"
                   placeholder="rahul@example.com"
                   value={formData.email}
                   onChange={handleChange}
@@ -291,7 +291,7 @@ const Register = () => {
                   name="phone"
                   type="tel"
                   required
-                  className="block w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 bg-gray-50/50 hover:bg-white hover:border-gray-300 text-sm"
+                  className="block w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 bg-white hover:bg-white hover:border-gray-300 text-sm text-gray-900"
                   placeholder="9876543210"
                   value={formData.phone}
                   onChange={handleChange}
@@ -311,7 +311,7 @@ const Register = () => {
                     name="password"
                     type={showPassword ? "text" : "password"}
                     required
-                    className="block w-full px-3 py-2.5 pr-10 border-2 border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 bg-gray-50/50 hover:bg-white hover:border-gray-300 text-sm"
+                    className="block w-full px-3 py-2.5 pr-10 border-2 border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 bg-white hover:bg-white hover:border-gray-300 text-sm text-gray-900"
                     placeholder="Create password"
                     value={formData.password}
                     onChange={handleChange}
@@ -345,7 +345,7 @@ const Register = () => {
                     name="confirmPassword"
                     type={showConfirmPassword ? "text" : "password"}
                     required
-                    className="block w-full px-3 py-2.5 pr-10 border-2 border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 bg-gray-50/50 hover:bg-white hover:border-gray-300 text-sm"
+                    className="block w-full px-3 py-2.5 pr-10 border-2 border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 bg-white hover:bg-white hover:border-gray-300 text-sm text-gray-900"
                     placeholder="Confirm password"
                     value={formData.confirmPassword}
                     onChange={handleChange}
@@ -380,7 +380,7 @@ const Register = () => {
                   id="vehicleType"
                   name="vehicleType"
                   required
-                  className="block w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 bg-gray-50/50 hover:bg-white hover:border-gray-300 text-sm"
+                  className="block w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 bg-white hover:bg-white hover:border-gray-300 text-sm text-gray-900"
                   value={formData.vehicleType}
                   onChange={handleChange}
                 >
