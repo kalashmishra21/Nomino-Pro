@@ -23,8 +23,8 @@ const io = socketIo(server, {
   cors: {
     origin: [
       'http://localhost:3000',
-      'http://localhost:3001',
       'https://nomino-pro.onrender.com',
+      'https://nominopro.onrender.com',
       process.env.FRONTEND_URL
     ].filter(Boolean),
     methods: ["GET", "POST", "PUT", "DELETE"],
@@ -72,6 +72,7 @@ app.use(cors({
   origin: [
     'http://localhost:3000',
     'https://nomino-pro.onrender.com',
+    'https://nominopro.onrender.com',
     process.env.FRONTEND_URL
   ].filter(Boolean),
   credentials: true
