@@ -142,8 +142,10 @@ export const AuthProvider = ({ children }) => {
     };
   }, []);
 
-  // Verify token on app load
+  // Verify token on app load with debounce
   useEffect(() => {
+    let timeoutId;
+    
     const verifyToken = async () => {
       const token = localStorage.getItem('token');
       if (token) {
@@ -163,7 +165,14 @@ export const AuthProvider = ({ children }) => {
       }
     };
 
-    verifyToken();
+    // Debounce token verification to prevent rapid calls
+    timeoutId = setTimeout(verifyToken, 100);
+    
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
   }, []);
 
   // Login function

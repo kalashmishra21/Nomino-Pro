@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
@@ -9,20 +9,31 @@ const Login = () => {
     password: ''
   });
   const [showPassword, setShowPassword] = useState(false);
+  const navigationRef = useRef(false);
 
-  const { login, isLoading, error, isAuthenticated, clearError } = useAuth();
+  const { login, isLoading, error, isAuthenticated, user, clearError } = useAuth();
   const { success, error: showError } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = location.state?.from?.pathname || '/dashboard';
-
-  // Redirect if already authenticated
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate(from, { replace: true });
+  // Get redirect path based on user role
+  const getRedirectPath = (userRole) => {
+    if (userRole === 'delivery_partner') {
+      return '/delivery-dashboard';
     }
-  }, [isAuthenticated, navigate, from]);
+    return '/dashboard';
+  };
+
+  const from = location.state?.from?.pathname || (user ? getRedirectPath(user.role) : '/dashboard');
+
+  // Redirect if already authenticated (with navigation guard)
+  useEffect(() => {
+    if (isAuthenticated && user && !navigationRef.current) {
+      navigationRef.current = true;
+      const redirectPath = getRedirectPath(user.role);
+      navigate(redirectPath, { replace: true });
+    }
+  }, [isAuthenticated, user, navigate]);
 
   // Clear error when component unmounts
   useEffect(() => {
@@ -56,11 +67,17 @@ const Login = () => {
 
     const result = await login(formData);
     
-    if (result.success) {
+    if (result.success && !navigationRef.current) {
       // Safely access user data with fallback
       const userName = result.data?.user?.firstName || result.data?.firstName || 'User';
+      const userRole = result.data?.user?.role || result.data?.role;
+      
       success(`Welcome back, ${userName}!`);
-      navigate(from, { replace: true });
+      
+      // Navigate based on user role (with navigation guard)
+      navigationRef.current = true;
+      const redirectPath = getRedirectPath(userRole);
+      navigate(redirectPath, { replace: true });
     }
   };
 

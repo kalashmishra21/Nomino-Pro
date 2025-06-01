@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { SocketProvider } from './contexts/SocketContext';
@@ -35,6 +35,30 @@ import Profile from './components/profile/Profile';
 
 import './App.css';
 
+// Smart redirect component based on user role
+const SmartRedirect = () => {
+  const { user, isAuthenticated, isLoading } = useAuth();
+  
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="spinner mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+  
+  // Redirect based on user role
+  const redirectPath = user?.role === 'delivery_partner' ? '/delivery-dashboard' : '/dashboard';
+  return <Navigate to={redirectPath} replace />;
+};
+
 function App() {
   return (
     <div className="App h-full">
@@ -48,14 +72,8 @@ function App() {
                   <Route path="/login" element={<Login />} />
                   <Route path="/register" element={<Register />} />
                   
-                  {/* Protected Routes */}
-                  <Route path="/" element={
-                    <ProtectedRoute>
-                      <Layout>
-                        <Navigate to="/dashboard" replace />
-                      </Layout>
-                    </ProtectedRoute>
-                  } />
+                  {/* Root redirect */}
+                  <Route path="/" element={<SmartRedirect />} />
                   
                   {/* Dashboard Routes */}
                   <Route path="/dashboard" element={
