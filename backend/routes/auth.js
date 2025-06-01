@@ -129,7 +129,7 @@ router.post('/login', validateUserLogin, async (req, res) => {
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: 'Invalid credentials'
+        message: "User doesn't exist"
       });
     }
 
@@ -147,7 +147,7 @@ router.post('/login', validateUserLogin, async (req, res) => {
     if (!isPasswordValid) {
       return res.status(401).json({
         success: false,
-        message: 'Invalid credentials'
+        message: "Password doesn't match"
       });
     }
 
