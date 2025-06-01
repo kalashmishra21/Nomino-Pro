@@ -1,8 +1,10 @@
 import React, { createContext, useContext, useReducer, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
-// Configure axios to use relative URLs (proxy will handle routing)
-// axios.defaults.baseURL = 'http://localhost:5000'; // Removed to use proxy
+// Simple configuration - use proxy in development, production URL only when deployed
+if (process.env.NODE_ENV === 'production') {
+  axios.defaults.baseURL = 'https://nomino-pro.onrender.com';
+}
 
 // Create the context
 const AuthContext = createContext();
