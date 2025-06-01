@@ -1,0 +1,169 @@
+{
+  "orders": [
+    {
+      "customerName": "Arjun Mehta",
+      "customerPhone": "9123456789",
+      "customerAddress": {
+        "street": "Sector 15, Block A, House 123",
+        "city": "Gurgaon",
+        "pincode": "122001"
+      },
+      "items": [
+        {
+          "name": "Butter Chicken",
+          "quantity": 2,
+          "price": 320,
+          "category": "main_course"
+        },
+        {
+          "name": "Naan",
+          "quantity": 4,
+          "price": 60,
+          "category": "side_dish"
+        },
+        {
+          "name": "Rice",
+          "quantity": 1,
+          "price": 80,
+          "category": "main_course"
+        }
+      ],
+      "totalAmount": 460,
+      "prepTime": 25,
+      "estimatedDeliveryTime": 30,
+      "status": "DELIVERED",
+      "rating": {
+        "deliveryService": 4.5,
+        "foodQuality": 4.2,
+        "overallExperience": 4.3,
+        "feedback": "Great delivery service, food arrived hot!"
+      }
+    },
+    {
+      "customerName": "Kavya Sharma",
+      "customerPhone": "9123456790",
+      "customerAddress": {
+        "street": "DLF Phase 2, Tower B, Flat 456",
+        "city": "Gurgaon",
+        "pincode": "122002"
+      },
+      "items": [
+        {
+          "name": "Paneer Tikka",
+          "quantity": 1,
+          "price": 280,
+          "category": "main_course"
+        },
+        {
+          "name": "Roti",
+          "quantity": 3,
+          "price": 45,
+          "category": "side_dish"
+        }
+      ],
+      "totalAmount": 325,
+      "prepTime": 20,
+      "estimatedDeliveryTime": 25,
+      "status": "DELIVERED",
+      "rating": {
+        "deliveryService": 4.8,
+        "foodQuality": 4.5,
+        "overallExperience": 4.6,
+        "feedback": "Excellent service, very fast delivery!"
+      }
+    },
+    {
+      "customerName": "Rohit Gupta",
+      "customerPhone": "9123456791",
+      "customerAddress": {
+        "street": "Cyber City, Building 7, Office 789",
+        "city": "Gurgaon",
+        "pincode": "122003"
+      },
+      "items": [
+        {
+          "name": "Biryani",
+          "quantity": 2,
+          "price": 400,
+          "category": "main_course"
+        },
+        {
+          "name": "Raita",
+          "quantity": 2,
+          "price": 60,
+          "category": "side_dish"
+        }
+      ],
+      "totalAmount": 460,
+      "prepTime": 30,
+      "estimatedDeliveryTime": 35,
+      "status": "DELIVERED",
+      "rating": {
+        "deliveryService": 4.2,
+        "foodQuality": 4.0,
+        "overallExperience": 4.1,
+        "feedback": "Good service, could be faster"
+      }
+    },
+    {
+      "customerName": "Anita Verma",
+      "customerPhone": "9123456792",
+      "customerAddress": {
+        "street": "Golf Course Road, Apartment 101",
+        "city": "Gurgaon",
+        "pincode": "122004"
+      },
+      "items": [
+        {
+          "name": "Dal Makhani",
+          "quantity": 1,
+          "price": 220,
+          "category": "main_course"
+        },
+        {
+          "name": "Jeera Rice",
+          "quantity": 1,
+          "price": 120,
+          "category": "main_course"
+        },
+        {
+          "name": "Naan",
+          "quantity": 2,
+          "price": 30,
+          "category": "side_dish"
+        }
+      ],
+      "totalAmount": 370,
+      "prepTime": 22,
+      "estimatedDeliveryTime": 28,
+      "status": "ON_ROUTE"
+    },
+    {
+      "customerName": "Suresh Jain",
+      "customerPhone": "9123456793",
+      "customerAddress": {
+        "street": "MG Road, Shop 567",
+        "city": "Gurgaon",
+        "pincode": "122005"
+      },
+      "items": [
+        {
+          "name": "Chole Bhature",
+          "quantity": 2,
+          "price": 180,
+          "category": "main_course"
+        },
+        {
+          "name": "Lassi",
+          "quantity": 2,
+          "price": 80,
+          "category": "beverage"
+        }
+      ],
+      "totalAmount": 260,
+      "prepTime": 18,
+      "estimatedDeliveryTime": 25,
+      "status": "READY"
+    }
+  ]
+} 

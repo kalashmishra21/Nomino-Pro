@@ -1,0 +1,45 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="32" cy="32" r="30" fill="#e23744"/>
+  
+  <!-- Hub/Network lines -->
+  <g stroke="#ffffff" stroke-width="2" opacity="0.3">
+    <line x1="32" y1="8" x2="32" y2="56"/>
+    <line x1="8" y1="32" x2="56" y2="32"/>
+    <line x1="18" y1="18" x2="46" y2="46"/>
+    <line x1="46" y1="18" x2="18" y2="46"/>
+  </g>
+  
+  <!-- Central hub circle -->
+  <circle cx="32" cy="32" r="8" fill="#ffffff"/>
+  
+  <!-- Food/delivery icons around the hub -->
+  <!-- Top: Fork and Knife -->
+  <g transform="translate(28, 12)">
+    <rect x="1" y="0" width="1" height="8" fill="#ffffff"/>
+    <rect x="4" y="0" width="1" height="8" fill="#ffffff"/>
+    <rect x="0" y="1" width="3" height="1" fill="#ffffff"/>
+  </g>
+  
+  <!-- Right: Delivery box -->
+  <g transform="translate(44, 28)">
+    <rect x="0" y="0" width="8" height="6" fill="#ffffff" stroke="#e23744" stroke-width="0.5"/>
+    <line x1="2" y1="0" x2="2" y2="6" stroke="#e23744" stroke-width="0.5"/>
+    <line x1="0" y1="2" x2="8" y2="2" stroke="#e23744" stroke-width="0.5"/>
+  </g>
+  
+  <!-- Bottom: Clock/Timer -->
+  <g transform="translate(28, 44)">
+    <circle cx="4" cy="4" r="4" fill="#ffffff" stroke="#e23744" stroke-width="0.5"/>
+    <line x1="4" y1="4" x2="4" y2="2" stroke="#e23744" stroke-width="1"/>
+    <line x1="4" y1="4" x2="6" y2="4" stroke="#e23744" stroke-width="1"/>
+  </g>
+  
+  <!-- Left: Location pin -->
+  <g transform="translate(12, 26)">
+    <path d="M4 0C1.8 0 0 1.8 0 4C0 7 4 12 4 12S8 7 8 4C8 1.8 6.2 0 4 0ZM4 6C2.9 6 2 5.1 2 4C2 2.9 2.9 2 4 2C5.1 2 6 2.9 6 4C6 5.1 5.1 6 4 6Z" fill="#ffffff"/>
+  </g>
+  
+  <!-- Letter "N" in the center -->
+  <text x="32" y="38" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#e23744">N</text>
+</svg> 

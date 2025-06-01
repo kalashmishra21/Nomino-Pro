@@ -1,0 +1,86 @@
+{
+  "restaurant_managers": [
+    {
+      "username": "restaurant_admin",
+      "email": "admin@nominopro.com",
+      "firstName": "Admin",
+      "lastName": "Restaurant",
+      "phone": "9999999999",
+      "role": "restaurant_manager",
+      "isActive": true,
+      "password": "admin123"
+    }
+  ],
+  "delivery_partners": [
+    {
+      "username": "rahul_delivery",
+      "email": "rahul.delivery@nominopro.com",
+      "firstName": "Rahul",
+      "lastName": "Sharma",
+      "phone": "9876543210",
+      "role": "delivery_partner",
+      "vehicleType": "scooter",
+      "isAvailable": true,
+      "isActive": true,
+      "rating": 4.5,
+      "totalDeliveries": 25,
+      "password": "password123"
+    },
+    {
+      "username": "priya_delivery",
+      "email": "priya.delivery@nominopro.com",
+      "firstName": "Priya",
+      "lastName": "Singh",
+      "phone": "9876543211",
+      "role": "delivery_partner",
+      "vehicleType": "bike",
+      "isAvailable": true,
+      "isActive": true,
+      "rating": 4.8,
+      "totalDeliveries": 42,
+      "password": "password123"
+    },
+    {
+      "username": "amit_delivery",
+      "email": "amit.delivery@nominopro.com",
+      "firstName": "Amit",
+      "lastName": "Kumar",
+      "phone": "9876543212",
+      "role": "delivery_partner",
+      "vehicleType": "bicycle",
+      "isAvailable": false,
+      "isActive": true,
+      "rating": 4.2,
+      "totalDeliveries": 18,
+      "password": "password123"
+    },
+    {
+      "username": "sneha_delivery",
+      "email": "sneha.delivery@nominopro.com",
+      "firstName": "Sneha",
+      "lastName": "Patel",
+      "phone": "9876543213",
+      "role": "delivery_partner",
+      "vehicleType": "scooter",
+      "isAvailable": true,
+      "isActive": true,
+      "rating": 4.6,
+      "totalDeliveries": 31,
+      "password": "password123"
+    },
+    {
+      "username": "vikash_delivery",
+      "email": "vikash.delivery@nominopro.com",
+      "firstName": "Vikash",
+      "lastName": "Yadav",
+      "phone": "9876543214",
+      "role": "delivery_partner",
+      "vehicleType": "car",
+      "isAvailable": true,
+      "isActive": true,
+      "rating": 4.3,
+      "totalDeliveries": 22,
+      "password": "password123"
+    }
+  ]
+} 

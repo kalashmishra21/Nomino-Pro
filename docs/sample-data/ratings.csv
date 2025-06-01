@@ -1,0 +1,11 @@
+Order ID,Customer Name,Delivery Partner,Delivery Service Rating,Food Quality Rating,Overall Experience,Feedback,Date
+ORD001,Arjun Mehta,Rahul Sharma,4.5,4.2,4.3,"Great delivery service, food arrived hot!",2024-01-15
+ORD002,Kavya Sharma,Priya Singh,4.8,4.5,4.6,"Excellent service, very fast delivery!",2024-01-16
+ORD003,Rohit Gupta,Amit Kumar,4.2,4.0,4.1,"Good service, could be faster",2024-01-17
+ORD004,Meera Patel,Sneha Patel,4.7,4.3,4.5,"Professional delivery partner",2024-01-18
+ORD005,Rajesh Kumar,Vikash Yadav,4.1,3.9,4.0,"Average experience",2024-01-19
+ORD006,Sunita Sharma,Rahul Sharma,4.6,4.4,4.5,"Quick delivery, hot food",2024-01-20
+ORD007,Deepak Singh,Priya Singh,4.9,4.7,4.8,"Outstanding service!",2024-01-21
+ORD008,Anjali Verma,Amit Kumar,4.0,3.8,3.9,"Delivery was delayed",2024-01-22
+ORD009,Kiran Joshi,Sneha Patel,4.8,4.6,4.7,"Excellent experience",2024-01-23
+ORD010,Manish Gupta,Vikash Yadav,4.4,4.2,4.3,"Good overall service",2024-01-24 
