@@ -53,10 +53,6 @@ A comprehensive food delivery management platform built with **React.js**, **Nod
 - **JWT** - JSON Web Token authentication
 - **bcryptjs** - Password hashing
 
-## 🚀 **Quick Start**
-
-**For detailed setup instructions, see [Setup Guide](docs/SETUP_GUIDE.md)**
-
 ### **1. Clone & Install**
 ```bash
 git clone https://github.com/yourusername/nomino-pro.git
@@ -89,25 +85,6 @@ cd backend && npm start
 cd frontend && npm start
 ```
 
-**🎉 Access at: http://localhost:3000**
-
-## 🔑 **Test Credentials**
-
-### **Restaurant Manager**
-- **Email**: `admin@nominopro.com`
-- **Username**: `restaurant_admin`
-- **Password**: `admin123`
-
-### **Delivery Partners**
-| Name | Email | Password | Vehicle | Rating |
-|------|-------|----------|---------|--------|
-| Rahul Sharma | `rahul.delivery@nominopro.com` | `password123` | Scooter | 4.5⭐ |
-| Priya Singh | `priya.delivery@nominopro.com` | `password123` | Bike | 4.8⭐ |
-| Amit Kumar | `amit.delivery@nominopro.com` | `password123` | Bicycle | 4.2⭐ |
-| Sneha Patel | `sneha.delivery@nominopro.com` | `password123` | Scooter | 4.6⭐ |
-| Vikash Yadav | `vikash.delivery@nominopro.com` | `password123` | Car | 4.3⭐ |
-
-## 📁 **Project Structure**
 
 ```
 Nomino Pro/
@@ -204,17 +181,6 @@ PUT  /api/partners/availability # Update availability status
    - View real-time status updates
    - Rate completed deliveries
 
-### **Database Testing**
-```bash
-# Check database health
-node scripts/checkDatabase.js
-
-# Clean up database
-node scripts/fullDatabaseCleanup.js
-
-# Reset test data
-node scripts/addTestData.js
-```
 
 ## 🎯 **Bonus Features**
 
@@ -246,24 +212,6 @@ node scripts/addTestData.js
 - **Comprehensive Documentation**: Detailed setup and API docs
 - **Database Scripts**: Automated setup and maintenance tools
 - **Error Handling**: Robust error handling and logging
-
-## 📦 **Additional Resources**
-
-### **📚 Documentation**
-- **[Complete Setup Guide](docs/SETUP_GUIDE.md)** - Detailed installation and troubleshooting
-- **[API Collection](docs/Nomino-Pro-API-Collection.json)** - Postman collection for API testing
-- **[Database Scripts](backend/scripts/README.md)** - Database management tools
-
-### **📊 Sample Data Files**
-- **[Users Data](docs/sample-data/users.json)** - Test users (managers & partners)
-- **[Orders Data](docs/sample-data/orders.json)** - Sample orders with different statuses
-- **[Ratings Data](docs/sample-data/ratings.csv)** - Customer feedback and ratings
-
-### **🔧 Development Tools**
-- **Postman Collection**: Import `docs/Nomino-Pro-API-Collection.json`
-- **Database Scripts**: `backend/scripts/` directory
-- **Sample Data**: `docs/sample-data/` directory
-- **Environment Config**: `backend/config.env.example`
 
 ## 🐛 **Troubleshooting**
 
@@ -302,15 +250,6 @@ npm cache clean --force
 rm -rf node_modules package-lock.json
 npm install
 ```
-
-## 🤝 **Contributing**
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
 ## 📄 **License**
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -318,7 +257,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 👨‍💻 **Author**
 
 **Your Name**
-- GitHub: https://github.com/kalashmishra21/Nomino-Pro.git)
+- GitHub: https://github.com/kalashmishra21/Nomino-Pro.git
 ## 🙏 **Acknowledgments**
 
 - **MongoDB** for the robust database solution
