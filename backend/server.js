@@ -5,12 +5,15 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const http = require('http');
 const socketIo = require('socket.io');
-require('dotenv').config();
+require('dotenv').config({ path: './config.env' });
 
 // Import routes
 const authRoutes = require('./routes/auth');
 const orderRoutes = require('./routes/orders');
 const partnerRoutes = require('./routes/partners');
+
+// Import Swagger configuration
+const { swaggerUi, specs } = require('./config/swagger');
 
 const app = express();
 const server = http.createServer(app);
@@ -33,10 +36,9 @@ app.set('trust proxy', 1);
 // Rate limiting with proper configuration
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 1000, // Increased limit to 1000 requests per windowMs to prevent blocking during development
-  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-  // Use a simple key generator to avoid X-Forwarded-For issues
+  max: 1000, 
+  standardHeaders: true,
+  legacyHeaders: false, 
   keyGenerator: (req) => {
     return req.ip || req.connection.remoteAddress || 'unknown';
   },
@@ -70,17 +72,9 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Request logging middleware for debugging (commented out for cleaner logs)
-// app.use((req, res, next) => {
-//   console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
-//   if (req.method === 'POST' && req.path === '/api/orders') {
-//     console.log('POST /api/orders - Request body keys:', Object.keys(req.body));
-//   }
-//   next();
-// });
 
 // MongoDB connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/zomato-ops-pro')
+mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://kalashmishra21:Royal%402004@dailybytecluster.2gsmw8a.mongodb.net/DailyByteProject?retryWrites=true&w=majority&appName=DailyByteCluster')
 .then(() => console.log('✅ MongoDB connected successfully'))
 .catch(err => {
   console.error('❌ MongoDB connection error:', err);
@@ -149,6 +143,14 @@ app.get('/api/status', (req, res) => {
   });
 });
 
+// Swagger API Documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
+  explorer: true,
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: 'Nomino Pro API Documentation',
+  customfavIcon: '/favicon.ico'
+}));
+
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/orders', orderRoutes);
@@ -160,11 +162,21 @@ app.get('/', (req, res) => {
     success: true,
     message: 'Welcome to Nomino Pro API - Smart Kitchen + Delivery Hub',
     version: '1.0.0',
+    documentation: {
+      swagger: '/api-docs',
+      description: 'Interactive API documentation with Swagger UI'
+    },
+    features: {
+      dispatchTime: 'Auto-calculated dispatch time (prepTime + ETA)',
+      realTime: 'WebSocket-based real-time updates',
+      authentication: 'JWT-based role-based authentication'
+    },
     endpoints: {
       auth: '/api/auth',
       orders: '/api/orders',
       partners: '/api/partners',
-      status: '/api/status'
+      status: '/api/status',
+      docs: '/api-docs'
     }
   });
 });

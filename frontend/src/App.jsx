@@ -166,12 +166,12 @@ function App() {
 // Layout wrapper component
 const Layout = ({ children }) => {
   return (
-    <div className="flex h-full bg-gray-50 dark:bg-gray-900">
+    <div className="h-screen bg-gray-50 dark:bg-gray-900">
       <Sidebar />
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="ml-64 flex flex-col h-screen">
         <Navbar />
-        <main className="flex-1 overflow-auto bg-gray-50 dark:bg-gray-900">
-          <div className="h-full">
+        <main className="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900 scrollbar-hide">
+          <div className="min-h-full">
             {children}
           </div>
         </main>

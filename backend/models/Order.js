@@ -80,6 +80,27 @@ const OrderSchema = new mongoose.Schema({
     max: [60, 'Estimated delivery time cannot exceed 60 minutes'],
     default: 30
   },
+  // Auto-calculated dispatch time based on prepTime + ETA
+  calculatedDispatchTime: {
+    type: Number,
+    virtual: true,
+    get: function() {
+      return this.prepTime + this.estimatedDeliveryTime;
+    }
+  },
+  // Actual dispatch time when order is ready to be dispatched
+  actualDispatchTime: {
+    type: Date
+  },
+  // ETA (Estimated Time of Arrival) for delivery
+  eta: {
+    type: Number,
+    min: [10, 'ETA must be at least 10 minutes'],
+    max: [60, 'ETA cannot exceed 60 minutes'],
+    default: function() {
+      return this.estimatedDeliveryTime || 30;
+    }
+  },
   dispatchTime: {
     type: Date
   },
@@ -189,8 +210,20 @@ OrderSchema.pre('save', function(next) {
 
 // Calculate dispatch time when prep time or ETA changes
 OrderSchema.pre('save', function(next) {
-  if (this.prepTime && this.estimatedDeliveryTime && !this.dispatchTime) {
-    this.dispatchTime = new Date(Date.now() + (this.prepTime * 60 * 1000));
+  // Calculate actual dispatch time when order moves to READY status
+  if (this.isModified('status') && this.status === 'READY' && !this.actualDispatchTime) {
+    this.actualDispatchTime = new Date();
+  }
+  
+  // Update dispatchTime based on current time + calculated dispatch time
+  if (this.prepTime && this.estimatedDeliveryTime) {
+    const totalDispatchMinutes = this.prepTime + this.estimatedDeliveryTime;
+    
+    if (!this.dispatchTime || this.isModified('prepTime') || this.isModified('estimatedDeliveryTime')) {
+      // If order is being created or prep/delivery times are modified
+      const baseTime = this.status === 'READY' ? this.actualDispatchTime || new Date() : new Date();
+      this.dispatchTime = new Date(baseTime.getTime() + (totalDispatchMinutes * 60 * 1000));
+    }
   }
   next();
 });
@@ -222,9 +255,30 @@ OrderSchema.pre('save', function(next) {
   next();
 });
 
-// Virtual for total preparation + delivery time
+// Virtual for total preparation + delivery time (dispatchTime calculation)
 OrderSchema.virtual('totalEstimatedTime').get(function() {
   return this.prepTime + this.estimatedDeliveryTime;
+});
+
+// Virtual for calculated dispatch time in minutes
+OrderSchema.virtual('calculatedDispatchTimeMinutes').get(function() {
+  return this.prepTime + this.estimatedDeliveryTime;
+});
+
+// Virtual for estimated completion time from current time
+OrderSchema.virtual('estimatedCompletionTime').get(function() {
+  const now = new Date();
+  const totalMinutes = this.prepTime + this.estimatedDeliveryTime;
+  return new Date(now.getTime() + (totalMinutes * 60 * 1000));
+});
+
+// Virtual for dispatch time from order placement
+OrderSchema.virtual('dispatchTimeFromOrder').get(function() {
+  if (this.orderPlacedAt && this.prepTime && this.estimatedDeliveryTime) {
+    const totalMinutes = this.prepTime + this.estimatedDeliveryTime;
+    return new Date(this.orderPlacedAt.getTime() + (totalMinutes * 60 * 1000));
+  }
+  return null;
 });
 
 // Virtual for order age

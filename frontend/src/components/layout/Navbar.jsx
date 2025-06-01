@@ -266,16 +266,24 @@ const Navbar = () => {
                   setShowNotifications(!showNotifications);
                   if (!showNotifications) markAsRead();
                 }}
-                className="p-2 text-gray-400 hover:text-gray-600 dark:text-gray-300 dark:hover:text-gray-100 transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 relative"
+                className="relative p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-all duration-200 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+                title="Notifications"
               >
                 {/* Bell Icon */}
-                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5v-5zM10.354 15.354A9 9 0 118.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2C13.1 2 14 2.9 14 4C14 4.74 13.6 5.39 13 5.73V7C16.86 7.5 20 10.9 20 15V16L22 18V19H2V18L4 16V15C4 10.9 7.14 7.5 11 7V5.73C10.4 5.39 10 4.74 10 4C10 2.9 10.9 2 12 2ZM12 22C13.1 22 14 21.1 14 20H10C10 21.1 10.9 22 12 22Z"/>
                 </svg>
+                
+                {/* Notification Count Badge */}
                 {unreadCount > 0 && (
-                  <span className="absolute -top-1 -right-1 h-5 w-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                    {unreadCount > 9 ? '9+' : unreadCount}
+                  <span className="absolute -top-1 -right-1 min-w-[20px] h-5 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold rounded-full flex items-center justify-center shadow-lg border-2 border-white dark:border-gray-800 transform animate-pulse">
+                    {unreadCount > 99 ? '99+' : unreadCount}
                   </span>
+                )}
+                
+                {/* Active indicator dot when notifications are open */}
+                {showNotifications && (
+                  <span className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-primary-500 rounded-full"></span>
                 )}
               </button>
               
@@ -311,10 +319,11 @@ const Navbar = () => {
                       ))
                     ) : (
                       <div className="p-6 text-center">
-                        <svg className="h-8 w-8 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5v-5zM10.97 4.97a.235.235 0 0 0-.02 0 .327.327 0 0 0-.02.022L6.477 9.417a.25.25 0 0 1-.17.073H2a.25.25 0 0 1-.25-.25V6.25C1.75 5.56 2.31 5 3 5h.25V4a1 1 0 0 1 2 0v1h.25c.69 0 1.25.56 1.25 1.25v2.99l3.72-3.72a.75.75 0 0 1 1.06 1.06l-1.06 1.06.72.72a.75.75 0 0 1-1.06 1.06l-.72-.72-1.06 1.06a.75.75 0 0 1-1.06-1.06l1.06-1.06-.72-.72a.75.75 0 0 1 1.06-1.06l.72.72 1.06-1.06a.75.75 0 0 1 1.06 1.06z" />
+                        <svg className="h-8 w-8 text-gray-400 dark:text-gray-500 mx-auto mb-2" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 2C13.1 2 14 2.9 14 4C14 4.74 13.6 5.39 13 5.73V7C16.86 7.5 20 10.9 20 15V16L22 18V19H2V18L4 16V15C4 10.9 7.14 7.5 11 7V5.73C10.4 5.39 10 4.74 10 4C10 2.9 10.9 2 12 2ZM12 22C13.1 22 14 21.1 14 20H10C10 21.1 10.9 22 12 22Z"/>
                         </svg>
                         <p className="text-xs text-gray-500 dark:text-gray-400">No notifications yet</p>
+                        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">You'll receive updates about orders here</p>
                       </div>
                     )}
                     {notifications.length > 5 && (

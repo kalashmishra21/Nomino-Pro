@@ -63,11 +63,30 @@ const OrderTracker = ({ order, className = '' }) => {
   };
 
   const isStageCompleted = (stageIndex) => {
-    return stageIndex <= getCurrentStageIndex();
+    const currentIndex = getCurrentStageIndex();
+    
+    // If order is delivered, all stages up to and including delivered are completed
+    if (order?.status === 'DELIVERED') {
+      return stageIndex <= currentIndex;
+    }
+    
+    // If order is cancelled, only show completed up to the current stage
+    if (order?.status === 'CANCELLED') {
+      return stageIndex <= currentIndex;
+    }
+    
+    return stageIndex < currentIndex;
   };
 
   const isCurrentStage = (stageIndex) => {
-    return stageIndex === getCurrentStageIndex();
+    const currentIndex = getCurrentStageIndex();
+    
+    // If order is delivered or cancelled, no stage is "current" (all are either completed or pending)
+    if (order?.status === 'DELIVERED' || order?.status === 'CANCELLED') {
+      return false;
+    }
+    
+    return stageIndex === currentIndex;
   };
 
   const getStageTime = (stageKey) => {
@@ -137,14 +156,20 @@ const OrderTracker = ({ order, className = '' }) => {
             Progress
           </span>
           <span className="text-sm text-gray-500 dark:text-gray-400">
-            {getCurrentStageIndex() + 1} of {stages.length}
+            {order?.status === 'DELIVERED' ? stages.length : getCurrentStageIndex() + 1} of {stages.length}
           </span>
         </div>
         <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
           <div 
-            className="bg-gradient-to-r from-primary-500 to-primary-600 h-2 rounded-full transition-all duration-500 ease-out"
+            className={`h-2 rounded-full transition-all duration-500 ease-out ${
+              order?.status === 'DELIVERED' 
+                ? 'bg-gradient-to-r from-green-500 to-green-600' 
+                : order?.status === 'CANCELLED'
+                  ? 'bg-gradient-to-r from-red-500 to-red-600'
+                  : 'bg-gradient-to-r from-primary-500 to-primary-600'
+            }`}
             style={{ 
-              width: `${((getCurrentStageIndex() + 1) / stages.length) * 100}%` 
+              width: `${order?.status === 'DELIVERED' ? 100 : ((getCurrentStageIndex() + 1) / stages.length) * 100}%` 
             }}
           ></div>
         </div>
@@ -200,8 +225,11 @@ const OrderTracker = ({ order, className = '' }) => {
 
                 {/* Stage Status */}
                 <div className="mt-1">
-                  {completed && !current && (
+                  {completed && (
                     <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
+                      <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
                       Completed
                     </span>
                   )}
@@ -211,7 +239,15 @@ const OrderTracker = ({ order, className = '' }) => {
                       In Progress
                     </span>
                   )}
-                  {!completed && !current && (
+                  {!completed && !current && order?.status === 'CANCELLED' && (
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-300">
+                      <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                      Cancelled
+                    </span>
+                  )}
+                  {!completed && !current && order?.status !== 'CANCELLED' && (
                     <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400">
                       Pending
                     </span>

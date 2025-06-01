@@ -190,6 +190,146 @@ const OrderList = () => {
     });
   };
 
+  // Calculate dispatch time based on real order data
+  const calculateDispatchTime = (order) => {
+    // If order is delivered, show actual delivery time
+    if (order.status === 'DELIVERED' && order.deliveredAt) {
+      const orderTime = new Date(order.orderPlacedAt || order.createdAt);
+      const deliveredTime = new Date(order.deliveredAt);
+      const actualMinutes = Math.floor((deliveredTime - orderTime) / (1000 * 60));
+      
+      const hours = Math.floor(actualMinutes / 60);
+      const minutes = actualMinutes % 60;
+      
+      if (hours > 0) {
+        return `${hours}h ${minutes}m`;
+      }
+      return `${minutes} min`;
+    }
+    
+    // If order is on route, show time since order placed
+    if (order.status === 'ON_ROUTE' && order.onRouteAt) {
+      const orderTime = new Date(order.orderPlacedAt || order.createdAt);
+      const onRouteTime = new Date(order.onRouteAt);
+      const elapsedMinutes = Math.floor((onRouteTime - orderTime) / (1000 * 60));
+      
+      const hours = Math.floor(elapsedMinutes / 60);
+      const minutes = elapsedMinutes % 60;
+      
+      if (hours > 0) {
+        return `${hours}h ${minutes}m`;
+      }
+      return `${minutes} min`;
+    }
+    
+    // If order is picked up, show time since order placed
+    if (order.status === 'PICKED' && order.pickedAt) {
+      const orderTime = new Date(order.orderPlacedAt || order.createdAt);
+      const pickedTime = new Date(order.pickedAt);
+      const elapsedMinutes = Math.floor((pickedTime - orderTime) / (1000 * 60));
+      
+      const hours = Math.floor(elapsedMinutes / 60);
+      const minutes = elapsedMinutes % 60;
+      
+      if (hours > 0) {
+        return `${hours}h ${minutes}m`;
+      }
+      return `${minutes} min`;
+    }
+    
+    // If order is ready, show time since order placed
+    if (order.status === 'READY' && order.readyAt) {
+      const orderTime = new Date(order.orderPlacedAt || order.createdAt);
+      const readyTime = new Date(order.readyAt);
+      const elapsedMinutes = Math.floor((readyTime - orderTime) / (1000 * 60));
+      
+      const hours = Math.floor(elapsedMinutes / 60);
+      const minutes = elapsedMinutes % 60;
+      
+      if (hours > 0) {
+        return `${hours}h ${minutes}m`;
+      }
+      return `${minutes} min`;
+    }
+    
+    // If order is in prep, show elapsed time + estimated remaining
+    if (order.status === 'PREP') {
+      const orderTime = new Date(order.orderPlacedAt || order.createdAt);
+      const currentTime = new Date();
+      const elapsedMinutes = Math.floor((currentTime - orderTime) / (1000 * 60));
+      
+      // Calculate estimated remaining time
+      const totalEstimated = (order.prepTime || 30) + (order.estimatedDeliveryTime || 30);
+      const remainingMinutes = Math.max(0, totalEstimated - elapsedMinutes);
+      
+      const hours = Math.floor(remainingMinutes / 60);
+      const minutes = remainingMinutes % 60;
+      
+      if (hours > 0) {
+        return `${hours}h ${minutes}m`;
+      }
+      return `${minutes} min`;
+    }
+    
+    // If order is pending, show estimated total time
+    if (order.status === 'PENDING') {
+      const totalMinutes = (order.prepTime || 30) + (order.estimatedDeliveryTime || 30);
+      const hours = Math.floor(totalMinutes / 60);
+      const minutes = totalMinutes % 60;
+      
+      if (hours > 0) {
+        return `${hours}h ${minutes}m`;
+      }
+      return `${minutes} min`;
+    }
+    
+    // If order is cancelled, show time until cancellation
+    if (order.status === 'CANCELLED') {
+      const orderTime = new Date(order.orderPlacedAt || order.createdAt);
+      const cancelTime = new Date(order.cancelledAt || order.updatedAt);
+      const elapsedMinutes = Math.floor((cancelTime - orderTime) / (1000 * 60));
+      
+      const hours = Math.floor(elapsedMinutes / 60);
+      const minutes = elapsedMinutes % 60;
+      
+      if (hours > 0) {
+        return `${hours}h ${minutes}m`;
+      }
+      return `${minutes} min`;
+    }
+    
+    // Fallback to estimated time
+    if (order.prepTime && order.estimatedDeliveryTime) {
+      const totalMinutes = order.prepTime + order.estimatedDeliveryTime;
+      const hours = Math.floor(totalMinutes / 60);
+      const minutes = totalMinutes % 60;
+      
+      if (hours > 0) {
+        return `${hours}h ${minutes}m`;
+      }
+      return `${minutes} min`;
+    }
+    
+    return 'N/A';
+  };
+
+  // Calculate estimated completion time from order placement
+  const getEstimatedCompletionTime = (order) => {
+    if (!order.orderPlacedAt || !order.prepTime || !order.estimatedDeliveryTime) {
+      return 'N/A';
+    }
+    
+    const totalMinutes = order.prepTime + order.estimatedDeliveryTime;
+    const completionTime = new Date(new Date(order.orderPlacedAt).getTime() + (totalMinutes * 60 * 1000));
+    
+    return completionTime.toLocaleDateString('en-IN', {
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
   const handleFilterChange = (field, value) => {
     setFilters(prev => ({
       ...prev,
@@ -221,9 +361,9 @@ const OrderList = () => {
     { value: 'status', label: 'Status', order: 'asc' }
   ];
 
-  if (loading && orders.length === 0) {
+  if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+      <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
           <p className="text-gray-600 dark:text-gray-400">Loading orders...</p>
@@ -233,7 +373,7 @@ const OrderList = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+    <div className="py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
@@ -369,6 +509,9 @@ const OrderList = () => {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                     Date
                   </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    Dispatch Time
+                  </th>
                   {user?.role === 'restaurant_manager' && (
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Delivery Partner
@@ -408,6 +551,9 @@ const OrderList = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                       {formatDate(order.orderPlacedAt || order.createdAt)}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                      {calculateDispatchTime(order)}
                     </td>
                     {user?.role === 'restaurant_manager' && (
                       <td className="px-6 py-4 whitespace-nowrap">

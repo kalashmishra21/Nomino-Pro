@@ -6,9 +6,6 @@ const { authenticateToken, requireRole } = require('../middleware/auth');
 
 const router = express.Router();
 
-// @route   GET /api/partners
-// @desc    Get all delivery partners (for restaurant managers)
-// @access  Private (Restaurant Manager)
 router.get('/', 
   authenticateToken, 
   requireRole('restaurant_manager'), 
@@ -54,8 +51,6 @@ router.get('/',
 );
 
 // @route   GET /api/partners/available
-// @desc    Get available delivery partners
-// @access  Private (Restaurant Manager)
 router.get('/available', 
   authenticateToken, 
   requireRole('restaurant_manager'), 
@@ -167,8 +162,6 @@ router.get('/my/active-orders',
 );
 
 // @route   GET /api/partners/my/stats
-// @desc    Get delivery partner's performance statistics
-// @access  Private (Delivery Partner)
 router.get('/my/stats', 
   authenticateToken, 
   requireRole('delivery_partner'), 
@@ -219,14 +212,13 @@ router.get('/my/stats',
               $avg: {
                 $divide: [
                   { $subtract: ['$deliveredAt', '$pickedAt'] },
-                  1000 * 60 // Convert to minutes
+                  1000 * 60 
                 ]
               }
             }
           }
         }
       ]);
-
       // Get rating stats separately (only from orders that have ratings)
       const ratingStats = await Order.aggregate([
         { 

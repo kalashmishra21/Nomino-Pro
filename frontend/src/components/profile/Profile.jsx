@@ -20,7 +20,9 @@ const Profile = () => {
     email: '',
     phone: '',
     username: '',
-    vehicleType: ''
+    vehicleType: '',
+    currentLocation: '',
+    emergencyContact: ''
   });
 
   // Password change state
@@ -42,36 +44,52 @@ const Profile = () => {
         email: user.email || '',
         phone: user.phone || '',
         username: user.username || '',
-        vehicleType: user.vehicleType || ''
+        vehicleType: user.vehicleType || '',
+        currentLocation: user.currentLocation || '',
+        emergencyContact: user.emergencyContact || ''
       });
     }
   }, [user]);
 
   const validateProfileForm = () => {
-    const errors = {};
+    const errors = [];
     
-    if (!profileData.firstName.trim()) {
-      errors.firstName = 'First name is required';
+    // Validate first name
+    if (!profileData.firstName?.trim()) {
+      errors.push('First name is required');
+    } else if (!/^[a-zA-Z\s]+$/.test(profileData.firstName.trim())) {
+      errors.push('First name can only contain letters and spaces');
     }
     
-    if (!profileData.lastName.trim()) {
-      errors.lastName = 'Last name is required';
+    // Validate last name
+    if (!profileData.lastName?.trim()) {
+      errors.push('Last name is required');
+    } else if (!/^[a-zA-Z\s]+$/.test(profileData.lastName.trim())) {
+      errors.push('Last name can only contain letters and spaces');
     }
     
-    if (!profileData.email.trim()) {
-      errors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(profileData.email)) {
-      errors.email = 'Email is invalid';
+    // Validate phone number
+    if (profileData.phone) {
+      const cleanPhone = profileData.phone.replace(/\D/g, '');
+      if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
+        errors.push('Phone number must be a valid 10-digit Indian number starting with 6, 7, 8, or 9');
+    }
     }
     
-    if (!profileData.phone.trim()) {
-      errors.phone = 'Phone number is required';
-    } else if (!/^\d{10}$/.test(profileData.phone.replace(/\D/g, ''))) {
-      errors.phone = 'Phone number must be 10 digits';
+    // Validate vehicle type for delivery partners
+    if (user?.role === 'delivery_partner' && profileData.vehicleType) {
+      const validVehicleTypes = ['bike', 'scooter', 'bicycle', 'car'];
+      if (!validVehicleTypes.includes(profileData.vehicleType)) {
+        errors.push('Please select a valid vehicle type');
+      }
     }
-
-    setProfileErrors(errors);
-    return Object.keys(errors).length === 0;
+    
+    if (errors.length > 0) {
+      showError(errors.join('. '));
+      return false;
+    }
+    
+    return true;
   };
 
   const validatePasswordForm = () => {
@@ -163,19 +181,30 @@ const Profile = () => {
     
     setLoading(true);
     try {
-      // Create FormData for file upload
-      const formData = new FormData();
-      Object.keys(profileData).forEach(key => {
-        formData.append(key, profileData[key]);
-      });
+      // Only send fields that have form inputs and are not empty
+      const updateData = {};
       
-      if (profilePhoto) {
-        formData.append('profilePhoto', profilePhoto);
+      // Basic profile fields that have form inputs
+      if (profileData.firstName && profileData.firstName.trim()) {
+        updateData.firstName = profileData.firstName.trim();
+      }
+      if (profileData.lastName && profileData.lastName.trim()) {
+        updateData.lastName = profileData.lastName.trim();
+      }
+      if (profileData.phone && profileData.phone.trim()) {
+        updateData.phone = profileData.phone.replace(/\D/g, ''); // Clean phone number
+      }
+      
+      // Vehicle type for delivery partners
+      if (user?.role === 'delivery_partner' && profileData.vehicleType) {
+        updateData.vehicleType = profileData.vehicleType;
       }
 
-      const response = await axios.put('/api/auth/profile', formData, {
+      console.log('Sending profile update data:', updateData); // Debug log
+
+      const response = await axios.put('/api/auth/profile', updateData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'application/json'
         }
       });
       
@@ -186,6 +215,7 @@ const Profile = () => {
         setProfilePhotoPreview(null);
       }
     } catch (error) {
+      console.error('Profile update error:', error.response?.data); // Debug log
       showError(error.response?.data?.message || 'Failed to update profile');
     } finally {
       setLoading(false);
@@ -224,11 +254,25 @@ const Profile = () => {
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-IN', {
+    try {
+      if (!dateString) return 'Not available';
+      
+      const date = new Date(dateString);
+      
+      // Check if date is valid
+      if (isNaN(date.getTime())) {
+        return 'Not available';
+      }
+      
+      return date.toLocaleDateString('en-IN', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
     });
+    } catch (error) {
+      console.error('Date formatting error:', error);
+      return 'Not available';
+    }
   };
 
   if (!user) {
@@ -240,7 +284,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+    <div className="py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8">
@@ -308,22 +352,22 @@ const Profile = () => {
                     </svg>
                     {formatRole(user.role)}
                   </span>
-                  <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm ${
+                  <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm border ${
                     user.isActive 
-                      ? 'bg-green-500/20 text-white' 
-                      : 'bg-red-500/20 text-white'
+                      ? 'bg-green-500/20 text-green-100 border-green-400/30' 
+                      : 'bg-red-500/20 text-red-100 border-red-400/30'
                   }`}>
-                    <div className={`h-2 w-2 rounded-full mr-2 ${user.isActive ? 'bg-green-400' : 'bg-red-400'}`}></div>
-                    {user.isActive ? 'Active' : 'Inactive'}
+                    <div className={`h-2 w-2 rounded-full mr-2 animate-pulse ${user.isActive ? 'bg-green-400' : 'bg-red-400'}`}></div>
+                    {user.isActive ? 'Active Account' : 'Inactive Account'}
                   </span>
                   {user.role === 'delivery_partner' && (
-                    <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm ${
+                    <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm border ${
                       user.isAvailable 
-                        ? 'bg-blue-500/20 text-white' 
-                        : 'bg-gray-500/20 text-white'
+                        ? 'bg-blue-500/20 text-blue-100 border-blue-400/30' 
+                        : 'bg-gray-500/20 text-gray-100 border-gray-400/30'
                     }`}>
-                      <div className={`h-2 w-2 rounded-full mr-2 ${user.isAvailable ? 'bg-blue-400' : 'bg-gray-400'}`}></div>
-                      {user.isAvailable ? 'Available' : 'Unavailable'}
+                      <div className={`h-2 w-2 rounded-full mr-2 ${user.isAvailable ? 'bg-blue-400 animate-pulse' : 'bg-gray-400'}`}></div>
+                      {user.isAvailable ? 'Available for Delivery' : 'Not Available'}
                     </span>
                   )}
                 </div>
