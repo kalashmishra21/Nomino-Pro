@@ -1,6 +1,6 @@
 # 🍕 Nomino Pro - Smart Kitchen + Delivery Hub
 
-A comprehensive **MERN Stack** food delivery management platform with real-time tracking, intelligent dispatch system, and role-based dashboards. Built with **React.js**, **Node.js**, **Express.js**, and **MongoDB**.
+A comprehensive food delivery management platform built with **React.js**, **Node.js**, **Express.js**, and **MongoDB**. Nomino Pro streamlines restaurant operations and delivery management with real-time tracking, role-based dashboards, and advanced analytics.
 
 ![Nomino Pro Banner](https://img.shields.io/badge/Nomino%20Pro-Food%20Delivery%20Platform-orange?style=for-the-badge&logo=food&logoColor=white)
 
@@ -74,11 +74,13 @@ A comprehensive **MERN Stack** food delivery management platform with real-time 
 Before you begin, ensure you have the following installed:
 
 - **Node.js** (v16.0.0 or higher) - [Download](https://nodejs.org/)
-- **MongoDB Compass** (for database visualization) - [Download](https://www.mongodb.com/products/compass)
+- **MongoDB** (v5.0.0 or higher) - [Download](https://www.mongodb.com/try/download/community)
 - **Git** - [Download](https://git-scm.com/)
 - **npm** or **yarn** package manager
 
 ## 🚀 **Quick Start**
+
+**For detailed setup instructions, see [Setup Guide](docs/SETUP_GUIDE.md)**
 
 ### **1. Clone & Install**
 ```bash
@@ -149,41 +151,28 @@ cd frontend && npm start
 | Sneha Patel | `sneha.delivery@nominopro.com` | `password123` | Scooter | 4.6⭐ |
 | Vikash Yadav | `vikash.delivery@nominopro.com` | `password123` | Car | 4.3⭐ |
 
-## 🗄️ **Database Configuration**
-
-### **MongoDB Atlas Setup**
-- **Cluster**: DailyByteCluster
-- **Database**: DailyByteProject
-- **Connection**: MongoDB Atlas Cloud
-- **Compass URL**: `mongodb+srv://kalashmishra21:Royal%402004@dailybytecluster.2gsmw8a.mongodb.net/DailyByteProject`
-
-### **Collections**
-- `users` - Restaurant managers and delivery partners
-- `orders` - Order management with status tracking
-- `sessions` - JWT session management
-
 ## 📁 **Project Structure**
 
 ```
 Nomino Pro/
 ├── backend/
-│   ├── models/
+│   ├────── models/
 │   │   ├── User.js              # User model (Restaurant Managers & Delivery Partners)
-│   │   └── Order.js             # Order model with smart dispatch tracking
-│   ├── routes/
-│   │   ├── auth.js              # Authentication routes
-│   │   ├── orders.js            # Order management routes
-│   │   └── partners.js          # Delivery partner routes
-│   ├── middleware/
-│   │   ├── auth.js              # JWT authentication middleware
-│   │   └── validation.js        # Request validation middleware
-│   ├── scripts/
-│   │   ├── addTestData.js       # Complete test data setup
-│   │   ├── checkDatabase.js     # Database verification
-│   │   └── fullDatabaseCleanup.js # Database maintenance
-│   ├── server.js                # Express server with Socket.io
-│   ├── package.json
-│   └── .env                     # Environment configuration
+│   │   │   └── Order.js             # Order model with status tracking
+│   │   ├── routes/
+│   │   │   ├── auth.js              # Authentication routes
+│   │   │   ├── orders.js            # Order management routes
+│   │   │   └── partners.js          # Delivery partner routes
+│   │   ├── middleware/
+│   │   │   ├── auth.js              # JWT authentication middleware
+│   │   │   └── validation.js        # Request validation middleware
+│   │   ├── scripts/
+│   │   │   ├── addTestData.js       # Complete test data setup
+│   │   │   ├── checkDatabase.js     # Database verification
+│   │   │   └── fullDatabaseCleanup.js # Database maintenance
+│   │   ├── server.js                # Express server setup
+│   │   ├── package.json
+│   │   └── config.env               # Environment configuration
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
@@ -245,43 +234,88 @@ GET  /api/partners/my/stats     # Get partner's statistics
 
 ## 🧪 **Testing Features**
 
-### **1. Smart Dispatch Time Testing**
-- Create orders with different prep times
-- Watch dispatch times update based on real progress
-- Verify completed orders show actual delivery time
+### **Manual Testing Steps**
 
-### **2. Track Order Logic Testing**
-- **Restaurant Manager**: Can track active orders, no track button for completed
-- **Delivery Partner**: No track buttons (they're delivering)
-- **Completed Orders**: Show completion messages instead of track buttons
+1. **Restaurant Manager Flow:**
+   - Login as restaurant manager
+   - Create new orders
+   - Move orders through PENDING → PREP → READY
+   - Assign delivery partners to ready orders
+   - Monitor real-time updates
 
-### **3. Real-time Updates Testing**
-- Open multiple browser windows with different roles
-- Update order status and watch real-time updates
-- Test WebSocket connectivity indicators
+2. **Delivery Partner Flow:**
+   - Login as delivery partner
+   - View assigned orders
+   - Update order status: PICKED → ON_ROUTE → DELIVERED
+   - Check earnings and performance statistics
 
-### **4. Profile Management Testing**
-- Update profile information
-- Verify only allowed fields are updated
-- Test validation and error handling
+3. **Customer Tracking:**
+   - Access order tracking page
+   - View real-time status updates
+   - Rate completed deliveries
 
-## 🎨 **UI/UX Features**
+### **Database Testing**
+```bash
+# Check database health
+node scripts/checkDatabase.js
 
-### **Modern Design Elements**
-- ✅ **Compact Layout**: Optimized spacing for better content density
-- ✅ **Consistent Colors**: Unified color scheme across all components
-- ✅ **Smart Hover Effects**: Enhanced sidebar interactions with branded colors
-- ✅ **Conditional UI**: Context-aware button visibility
-- ✅ **Status Messages**: Beautiful completion and cancellation messages
-- ✅ **Real-time Indicators**: Live connection status and updates
+# Clean up database
+node scripts/fullDatabaseCleanup.js
 
-### **Responsive Design**
-- ✅ **Mobile-First**: Optimized for mobile devices
-- ✅ **Tablet Support**: Perfect layout for tablets
-- ✅ **Desktop Experience**: Full-featured desktop interface
-- ✅ **Dark Mode**: Complete dark theme support
+# Reset test data
+node scripts/addTestData.js
+```
 
-## 🚀 **Deployment**
+## 🎯 **Bonus Features**
+
+### **✅ Real-time Features**
+- **Live Order Updates**: WebSocket-powered real-time synchronization
+- **Instant Notifications**: Real-time alerts for order status changes
+- **Live Dashboard**: Auto-updating statistics and metrics
+
+### **✅ Advanced Analytics**
+- **Performance Metrics**: Delivery time, success rate, earnings tracking
+- **Rating System**: Customer feedback and partner performance ratings
+- **Trend Analysis**: 7-day delivery and earnings trends
+- **Commission Tracking**: Automated 10% commission calculation
+
+### **✅ User Experience**
+- **Dark Mode**: Toggle between light and dark themes
+- **Responsive Design**: Mobile-optimized interface
+- **Toast Notifications**: User-friendly success/error messages
+- **Loading States**: Smooth loading indicators
+
+### **✅ Security Features**
+- **JWT Authentication**: Secure token-based authentication
+- **Role-based Access**: Restricted actions based on user roles
+- **Password Hashing**: bcrypt password encryption
+- **Input Validation**: Comprehensive request validation
+
+### **✅ Developer Experience**
+- **Clean Code Structure**: Modular and maintainable codebase
+- **Comprehensive Documentation**: Detailed setup and API docs
+- **Database Scripts**: Automated setup and maintenance tools
+- **Error Handling**: Robust error handling and logging
+
+## 📦 **Additional Resources**
+
+### **📚 Documentation**
+- **[Complete Setup Guide](docs/SETUP_GUIDE.md)** - Detailed installation and troubleshooting
+- **[API Collection](docs/Nomino-Pro-API-Collection.json)** - Postman collection for API testing
+- **[Database Scripts](backend/scripts/README.md)** - Database management tools
+
+### **📊 Sample Data Files**
+- **[Users Data](docs/sample-data/users.json)** - Test users (managers & partners)
+- **[Orders Data](docs/sample-data/orders.json)** - Sample orders with different statuses
+- **[Ratings Data](docs/sample-data/ratings.csv)** - Customer feedback and ratings
+
+### **🔧 Development Tools**
+- **Postman Collection**: Import `docs/Nomino-Pro-API-Collection.json`
+- **Database Scripts**: `backend/scripts/` directory
+- **Sample Data**: `docs/sample-data/` directory
+- **Environment Config**: `backend/config.env.example`
+
+## 🐛 **Troubleshooting**
 
 ### **Frontend Deployment (Vercel/Netlify)**
 ```bash
@@ -309,20 +343,21 @@ FRONTEND_URL=https://your-frontend-domain.com
 ## 🤝 **Contributing**
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📝 **License**
+## 📄 **License**
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 👨‍💻 **Developer**
 
-**Kalash Mishra**
-- GitHub: [@kalashmishra](https://github.com/kalashmishra)
-- Email: kalashmishra21@gmail.com
+**Your Name**
+- GitHub: [@yourusername](https://github.com/yourusername)
+- LinkedIn: [Your LinkedIn](https://linkedin.com/in/yourprofile)
+- Email: your.email@example.com
 
 ## 🙏 **Acknowledgments**
 
@@ -336,42 +371,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **⭐ If you found this project helpful, please give it a star!**
 
-## 🔧 **Troubleshooting**
-
-### **Authentication Issues (401 Unauthorized)**
-
-If you encounter "Invalid credentials" or 401 errors:
-
-1. **Environment Configuration**: Ensure `backend/config.env` is properly loaded
-   ```javascript
-   // In server.js, make sure you have:
-   require('dotenv').config({ path: './config.env' });
-   ```
-
-2. **Database Connection**: Verify MongoDB Atlas connection
-   ```bash
-   # Test connection from backend directory
-   node -e "require('dotenv').config({path:'./config.env'}); console.log(process.env.MONGODB_URI)"
-   ```
-
-3. **Test Users**: Ensure test users exist in database
-   ```bash
-   # Create test users if they don't exist
-   cd backend
-   node checkUsers.js  # This will create test users if missing
-   ```
-
-4. **Phone Number Format**: User phone numbers must be exactly 10 digits (no country code)
-   - ✅ Correct: `9876543210`
-   - ❌ Wrong: `+91-9876543210`
-
-5. **JWT Secret**: Ensure JWT_SECRET is set in config.env
-   ```env
-   JWT_SECRET=your-super-secret-jwt-key-change-this-in-production-zomato-ops-pro-2024
-   ```
-
-### **Common Solutions**
-- **Backend not starting**: Check if port 5000 is available
-- **Frontend proxy errors**: Ensure backend is running on port 5000
-- **Database connection**: Verify MongoDB Atlas credentials and network access
-- **CORS issues**: Check CORS_ORIGIN in config.env matches frontend URL
+**🚀 Ready to revolutionize food delivery management? Get started with Nomino Pro today!**
