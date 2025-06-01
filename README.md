@@ -260,10 +260,6 @@ GET  /api/partners/my/stats     # Get partner's statistics
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👨‍💻 **Developer**
-
-**Your Name**
-- GitHub: [kalashmishra21](https://github.com/kalashmishra21/Nomino-Pro.git)
 
 ## 🙏 **Acknowledgments**
 
