@@ -4,11 +4,8 @@ A comprehensive food delivery management platform built with **React.js**, **Nod
 
 ## 🌐 **Live Demo**
 
-**🚀 [View Live Application](https://nominopro.onrender.com/)**
+** 👉[View Live Application](https://nominopro.onrender.com/)**
 
-Experience Nomino Pro in action! The application is deployed and ready to use with all features fully functional.
-
-![Nomino Pro Banner](https://img.shields.io/badge/Nomino%20Pro-Food%20Delivery%20Platform-orange?style=for-the-badge&logo=food&logoColor=white)
 
 ## 🚀 **Latest Features & Updates**
 
