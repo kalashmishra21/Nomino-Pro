@@ -5,7 +5,18 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const http = require('http');
 const socketIo = require('socket.io');
-require('dotenv').config({ path: './config.env' });
+require('dotenv').config({ path: require('path').resolve(__dirname, '.env') });
+
+const requiredEnv = ['MONGODB_URI', 'JWT_SECRET'];
+const missingEnv = requiredEnv.filter((key) => !process.env[key]);
+if (missingEnv.length) {
+  console.error(`Missing required environment variables: ${missingEnv.join(', ')}`);
+  process.exit(1);
+}
+if (process.env.JWT_SECRET.length < 32) {
+  console.error('JWT_SECRET must be at least 32 characters long.');
+  process.exit(1);
+}
 
 // Import routes
 const authRoutes = require('./routes/auth');
@@ -84,12 +95,21 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 
 // MongoDB connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://kalashmishra21:Royal%402004@dailybytecluster.2gsmw8a.mongodb.net/DailyByteProject?retryWrites=true&w=majority&appName=DailyByteCluster')
-.then(() => console.log('✅ MongoDB connected successfully'))
-.catch(err => {
-  console.error('❌ MongoDB connection error:', err);
-  process.exit(1);
-});
+// Start only after MongoDB is reachable so health checks never report a ready API without persistence.
+const PORT = process.env.PORT || 5000;
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log('MongoDB connected successfully');
+    server.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+      console.log('Health check: /api/status');
+      console.log('Socket.IO server ready for real-time updates');
+    });
+  })
+  .catch((error) => {
+    console.error('MongoDB connection failed:', error.name, error.code || '');
+    process.exit(1);
+  });
 
 // Socket.IO connection handling
 const connectedUsers = new Map(); // Store user connections
@@ -199,13 +219,6 @@ app.get('/', (req, res) => {
 //   });
 // });
 
-const PORT = process.env.PORT || 5000;
-
-server.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📱 Health check: http://localhost:${PORT}/api/status`);
-  console.log(`🔌 WebSocket server ready for real-time updates`);
-});
 
 // Export io for use in routes
 module.exports = { app, io }; 

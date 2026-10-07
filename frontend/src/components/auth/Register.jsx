@@ -78,48 +78,26 @@ const Register = () => {
   };
 
   const validateForm = () => {
-    if (!formData.username.trim()) {
-      showError('Username is required');
-      return false;
-    }
-    if (!formData.email.trim()) {
-      showError('Email is required');
-      return false;
-    }
-    if (!formData.password) {
-      showError('Password is required');
-      return false;
-    }
-    if (formData.password !== formData.confirmPassword) {
-      showError('Passwords do not match');
-      return false;
-    }
-    if (!formData.firstName.trim()) {
-      showError('First name is required');
-      return false;
-    }
-    if (!formData.lastName.trim()) {
-      showError('Last name is required');
-      return false;
-    }
-    if (!formData.phone.trim()) {
-      showError('Phone number is required');
-      return false;
-    }
-
-    // Validate delivery partner specific fields
-    if (formData.role === 'delivery_partner') {
-      if (!formData.vehicleType) {
-        showError('Vehicle type is required for delivery partners');
-        return false;
-      }
-    }
-
+    const namePattern = /^[A-Za-z][A-Za-z ]{1,49}$/;
+    const usernamePattern = /^[A-Za-z0-9_]{3,30}$/;
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phonePattern = /^[6-9]\d{9}$/;
+    const password = formData.password;
+    if (!namePattern.test(formData.firstName.trim())) { showError('First name must be 2-50 letters'); return false; }
+    if (!namePattern.test(formData.lastName.trim())) { showError('Last name must be 2-50 letters'); return false; }
+    if (!usernamePattern.test(formData.username.trim())) { showError('Username must be 3-30 characters using letters, numbers, or underscores'); return false; }
+    if (!emailPattern.test(formData.email.trim())) { showError('Please enter a valid email address'); return false; }
+    if (!phonePattern.test(formData.phone.trim())) { showError('Enter a valid 10-digit Indian phone number'); return false; }
+    if (password.length < 10 || password.length > 128 || !/[A-Za-z]/.test(password) || !/\d/.test(password)) { showError('Password must be 10-128 characters and include a letter and a number'); return false; }
+    if (password !== formData.confirmPassword) { showError('Passwords do not match'); return false; }
+    if (!['restaurant_manager', 'delivery_partner'].includes(formData.role)) { showError('Please select a supported role'); return false; }
+    if (formData.role === 'delivery_partner' && !['bike', 'scooter', 'bicycle', 'car'].includes(formData.vehicleType)) { showError('Please select a valid vehicle type'); return false; }
     return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
     
     // Validation
     if (formData.password !== formData.confirmPassword) {
@@ -224,7 +202,8 @@ const Register = () => {
                   id="firstName"
                   name="firstName"
                   type="text"
-                  required
+                                    maxLength={50}
+required
                   className="block w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 bg-white hover:bg-white hover:border-gray-300 text-sm text-gray-900"
                   placeholder="Rahul"
                   value={formData.firstName}
@@ -239,7 +218,8 @@ const Register = () => {
                   id="lastName"
                   name="lastName"
                   type="text"
-                  required
+                                    maxLength={50}
+required
                   className="block w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 bg-white hover:bg-white hover:border-gray-300 text-sm text-gray-900"
                   placeholder="Sharma"
                   value={formData.lastName}
@@ -258,7 +238,8 @@ const Register = () => {
                   id="username"
                   name="username"
                   type="text"
-                  required
+                                    maxLength={30}
+required
                   className="block w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 bg-white hover:bg-white hover:border-gray-300 text-sm text-gray-900"
                   placeholder="rahulsharma"
                   value={formData.username}
@@ -274,7 +255,8 @@ const Register = () => {
                   id="email"
                   name="email"
                   type="email"
-                  required
+                                    maxLength={254}
+required
                   className="block w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 bg-white hover:bg-white hover:border-gray-300 text-sm text-gray-900"
                   placeholder="rahul@example.com"
                   value={formData.email}
@@ -290,7 +272,10 @@ const Register = () => {
                   id="phone"
                   name="phone"
                   type="tel"
-                  required
+                                    inputMode="numeric"
+                  maxLength={10}
+                  pattern="[6-9][0-9]{9}"
+required
                   className="block w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 bg-white hover:bg-white hover:border-gray-300 text-sm text-gray-900"
                   placeholder="9876543210"
                   value={formData.phone}
@@ -310,7 +295,9 @@ const Register = () => {
                     id="password"
                     name="password"
                     type={showPassword ? "text" : "password"}
-                    required
+                                        minLength={10}
+                    maxLength={128}
+required
                     className="block w-full px-3 py-2.5 pr-10 border-2 border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 bg-white hover:bg-white hover:border-gray-300 text-sm text-gray-900"
                     placeholder="Create password"
                     value={formData.password}
@@ -344,7 +331,9 @@ const Register = () => {
                     id="confirmPassword"
                     name="confirmPassword"
                     type={showConfirmPassword ? "text" : "password"}
-                    required
+                                        minLength={10}
+                    maxLength={128}
+required
                     className="block w-full px-3 py-2.5 pr-10 border-2 border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 bg-white hover:bg-white hover:border-gray-300 text-sm text-gray-900"
                     placeholder="Confirm password"
                     value={formData.confirmPassword}

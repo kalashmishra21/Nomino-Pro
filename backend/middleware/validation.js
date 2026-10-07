@@ -7,8 +7,7 @@ const handleValidationErrors = (req, res, next) => {
   if (!errors.isEmpty()) {
     const errorMessages = errors.array().map(error => ({
       field: error.path,
-      message: error.msg,
-      value: error.value
+      message: error.msg
     }));
     
     return res.status(400).json({
@@ -50,8 +49,10 @@ const validateUserRegistration = [
     .withMessage('Username can only contain letters, numbers, and underscores'),
     
   body('password')
-    .isLength({ min: 6 })
-    .withMessage('Password must be at least 6 characters long'),
+    .isLength({ min: 10, max: 128 })
+    .withMessage('Password must be between 10 and 128 characters')
+    .matches(/^(?=.*[A-Za-z])(?=.*\d).+$/)
+    .withMessage('Password must include at least one letter and one number'),
     
   body('phone')
     .matches(/^[6-9]\d{9}$/)

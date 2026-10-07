@@ -1,10 +1,11 @@
 import React, { createContext, useContext, useReducer, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
-// Simple configuration - use proxy in development, production URL only when deployed
-if (process.env.NODE_ENV === 'production') {
-  axios.defaults.baseURL = 'https://nomino-pro.onrender.com';
-}
+// Use the configured API in production and the frontend development proxy locally.
+const API_BASE_URL = process.env.REACT_APP_API_URL ||
+  (process.env.NODE_ENV === 'production' ? 'https://nomino-pro.onrender.com' : '');
+axios.defaults.baseURL = API_BASE_URL;
+axios.defaults.timeout = 15000;
 
 // Create the context
 const AuthContext = createContext();
