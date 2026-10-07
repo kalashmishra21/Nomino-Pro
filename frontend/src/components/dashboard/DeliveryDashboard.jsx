@@ -24,7 +24,7 @@ const DeliveryDashboard = () => {
   const [isAvailable, setIsAvailable] = useState(true);
   const { error: showError, success } = useToast();
   const { user, updateUser } = useAuth();
-  const { subscribeToOrderUpdates, emitPartnerAvailability, isConnected } = useSocket();
+  const { subscribeToOrderUpdates, isConnected } = useSocket();
 
   useEffect(() => {
     fetchDashboardData();
@@ -87,12 +87,7 @@ const DeliveryDashboard = () => {
       await axios.put('/api/partners/availability', { isAvailable: newAvailability });
       setIsAvailable(newAvailability);
       await updateUser({ isAvailable: newAvailability });
-      
-      // Emit real-time availability update
-      emitPartnerAvailability({
-        partnerId: user._id,
-        isAvailable: newAvailability
-      });
+
       
       success(`You are now ${newAvailability ? 'available' : 'unavailable'} for deliveries`);
     } catch (error) {
