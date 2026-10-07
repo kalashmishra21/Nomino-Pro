@@ -10,7 +10,7 @@ const router = express.Router();
 const generateToken = (userId) => {
   return jwt.sign(
     { userId },
-    process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production',
+    process.env.JWT_SECRET,
     { expiresIn: '24h' }
   );
 };
@@ -106,7 +106,7 @@ router.post('/register', validateUserRegistration, async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Registration failed',
-      error: error.message
+      error: 'Please try again later'
     });
   }
 });
@@ -188,7 +188,7 @@ router.post('/login', validateUserLogin, async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Login failed',
-      error: error.message
+      error: 'Please try again later'
     });
   }
 });
@@ -219,7 +219,7 @@ router.get('/profile', authenticateToken, async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Failed to fetch profile',
-      error: error.message
+      error: 'Please try again later'
     });
   }
 });
@@ -275,7 +275,7 @@ router.put('/profile', authenticateToken, async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Failed to update profile',
-      error: error.message
+      error: 'Please try again later'
     });
   }
 });
@@ -295,10 +295,10 @@ router.put('/change-password', authenticateToken, async (req, res) => {
       });
     }
 
-    if (newPassword.length < 6) {
+    if (newPassword.length < 10 || newPassword.length > 128 || !/(?=.*[A-Za-z])(?=.*\d)/.test(newPassword)) {
       return res.status(400).json({
         success: false,
-        message: 'New password must be at least 6 characters long'
+        message: 'New password must be 10-128 characters and include a letter and a number'
       });
     }
 
@@ -328,7 +328,7 @@ router.put('/change-password', authenticateToken, async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Failed to change password',
-      error: error.message
+      error: 'Please try again later'
     });
   }
 });
@@ -379,7 +379,7 @@ router.get('/available-partners',
       res.status(500).json({
         success: false,
         message: 'Failed to fetch available partners',
-        error: error.message
+        error: 'Please try again later'
       });
     }
   }

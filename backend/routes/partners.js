@@ -409,6 +409,12 @@ router.put('/availability',
         { new: true }
       ).select('-password');
 
+      req.app.get('io')?.to('role_restaurant_manager').emit('partner_availability_updated', {
+        partnerId: String(req.user._id),
+        isAvailable,
+        timestamp: new Date().toISOString()
+      });
+
       res.json({
         success: true,
         message: `Status updated to ${isAvailable ? 'available' : 'unavailable'}`,

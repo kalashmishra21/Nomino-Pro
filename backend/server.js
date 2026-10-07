@@ -5,7 +5,20 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const http = require('http');
 const socketIo = require('socket.io');
-require('dotenv').config({ path: './config.env' });
+const jwt = require('jsonwebtoken');
+const User = require('./models/User');
+require('dotenv').config({ path: require('path').resolve(__dirname, '.env') });
+
+const requiredEnv = ['MONGODB_URI', 'JWT_SECRET'];
+const missingEnv = requiredEnv.filter((key) => !process.env[key]);
+if (missingEnv.length) {
+  console.error(`Missing required environment variables: ${missingEnv.join(', ')}`);
+  process.exit(1);
+}
+if (process.env.JWT_SECRET.length < 32) {
+  console.error('JWT_SECRET must be at least 32 characters long.');
+  process.exit(1);
+}
 
 // Import routes
 const authRoutes = require('./routes/auth');
@@ -34,6 +47,23 @@ const io = socketIo(server, {
 
 // Make io accessible to routes
 app.set('io', io);
+
+io.use(async (socket, next) => {
+  try {
+    const token = socket.handshake.auth?.token;
+    if (!token) return next(new Error('Authentication required'));
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.userId).select('_id role isActive');
+    if (!user || !user.isActive) return next(new Error('Invalid or inactive account'));
+
+    socket.data.userId = String(user._id);
+    socket.data.role = user.role;
+    next();
+  } catch (_error) {
+    next(new Error('Authentication failed'));
+  }
+});
 
 // Trust proxy setting for rate limiting
 app.set('trust proxy', 1);
@@ -84,63 +114,28 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 
 // MongoDB connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://kalashmishra21:Royal%402004@dailybytecluster.2gsmw8a.mongodb.net/DailyByteProject?retryWrites=true&w=majority&appName=DailyByteCluster')
-.then(() => console.log('✅ MongoDB connected successfully'))
-.catch(err => {
-  console.error('❌ MongoDB connection error:', err);
-  process.exit(1);
-});
+// Start only after MongoDB is reachable so health checks never report a ready API without persistence.
+const PORT = process.env.PORT || 5000;
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log('MongoDB connected successfully');
+    server.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+      console.log('Health check: /api/status');
+      console.log('Socket.IO server ready for real-time updates');
+    });
+  })
+  .catch((error) => {
+    console.error('MongoDB connection failed:', error.name, error.code || '');
+    process.exit(1);
+  });
 
-// Socket.IO connection handling
-const connectedUsers = new Map(); // Store user connections
-
+// Socket.IO connections are authenticated before they can join private rooms.
 io.on('connection', (socket) => {
-  console.log(`🔌 User connected: ${socket.id}`);
-
-  // Handle user authentication and room joining
-  socket.on('authenticate', (data) => {
-    const { userId, role } = data;
-    if (userId && role) {
-      socket.userId = userId;
-      socket.role = role;
-      connectedUsers.set(userId, { socketId: socket.id, role });
-      
-      // Join role-based rooms
-      socket.join(`role_${role}`);
-      
-      // Join user-specific room for targeted notifications
-      socket.join(`user_${userId}`);
-      
-      console.log(`👤 User authenticated: ${userId} (${role}) - Joined rooms: role_${role}, user_${userId}`);
-    }
-  });
-
-  // Handle order updates
-  socket.on('order_update', (data) => {
-    // Broadcast to all restaurant managers and relevant delivery partner
-    socket.to('role_restaurant_manager').emit('order_updated', data);
-    
-    if (data.deliveryPartnerId) {
-      const partnerConnection = connectedUsers.get(data.deliveryPartnerId);
-      if (partnerConnection) {
-        io.to(partnerConnection.socketId).emit('order_updated', data);
-      }
-    }
-  });
-
-  // Handle partner availability updates
-  socket.on('partner_availability', (data) => {
-    // Broadcast to all restaurant managers
-    socket.to('role_restaurant_manager').emit('partner_availability_updated', data);
-  });
-
-  // Handle disconnection
-  socket.on('disconnect', () => {
-    if (socket.userId) {
-      connectedUsers.delete(socket.userId);
-      console.log(`🔌 User disconnected: ${socket.userId}`);
-    }
-  });
+  const { userId, role } = socket.data;
+  socket.join(`role_${role}`);
+  socket.join(`user_${userId}`);
+  console.log(`Authenticated socket connected: ${socket.id} (${role})`);
 });
 
 // Health check endpoint
@@ -199,13 +194,6 @@ app.get('/', (req, res) => {
 //   });
 // });
 
-const PORT = process.env.PORT || 5000;
-
-server.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📱 Health check: http://localhost:${PORT}/api/status`);
-  console.log(`🔌 WebSocket server ready for real-time updates`);
-});
 
 // Export io for use in routes
 module.exports = { app, io }; 

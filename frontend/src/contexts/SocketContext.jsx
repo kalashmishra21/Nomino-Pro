@@ -23,7 +23,8 @@ export const SocketProvider = ({ children }) => {
   useEffect(() => {
     if (user && token) {
       // Initialize socket connection
-      const newSocket = io(process.env.REACT_APP_API_URL || 'http://localhost:5000', {
+      const newSocket = io(process.env.REACT_APP_API_URL || (process.env.NODE_ENV === 'production' ? 'https://nomino-pro.onrender.com' : 'http://localhost:5000'), {
+        auth: { token },
         transports: ['websocket', 'polling'],
         timeout: 20000,
         forceNew: true
@@ -33,13 +34,6 @@ export const SocketProvider = ({ children }) => {
       newSocket.on('connect', () => {
         console.log('🔌 Connected to WebSocket server');
         setIsConnected(true);
-        
-        // Authenticate user with server
-        newSocket.emit('authenticate', {
-          userId: user._id,
-          role: user.role,
-          token: token
-        });
         
         info('Real-time updates connected');
       });
@@ -131,31 +125,6 @@ export const SocketProvider = ({ children }) => {
     }
   }, [user, token, success, info]);
 
-  // Socket event emitters
-  const emitOrderUpdate = (orderData) => {
-    if (socket && isConnected) {
-      socket.emit('order_update', orderData);
-    }
-  };
-
-  const emitPartnerAvailability = (availabilityData) => {
-    if (socket && isConnected) {
-      socket.emit('partner_availability', availabilityData);
-    }
-  };
-
-  const joinRoom = (roomName) => {
-    if (socket && isConnected) {
-      socket.emit('join_room', roomName);
-    }
-  };
-
-  const leaveRoom = (roomName) => {
-    if (socket && isConnected) {
-      socket.emit('leave_room', roomName);
-    }
-  };
-
   // Subscribe to real-time events
   const subscribeToOrderUpdates = (callback) => {
     const handleOrderUpdate = (event) => {
@@ -185,8 +154,6 @@ export const SocketProvider = ({ children }) => {
     socket,
     isConnected,
     onlineUsers,
-    emitOrderUpdate,
-    emitPartnerAvailability,
     joinRoom,
     leaveRoom,
     subscribeToOrderUpdates,
